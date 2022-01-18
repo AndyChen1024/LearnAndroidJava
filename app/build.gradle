@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk Config.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.andychen1024.learnandroidjava"
-        minSdk 21
-        targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        applicationId Config.applicationId
+        minSdk Config.minSdkVersion
+        targetSdk Config.targetSdkVersion
+        versionCode Config.versionCode
+        versionName Config.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,10 +29,11 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation Config.depConfig.androidx.appcompat
+    implementation Config.depConfig.androidx.material
+    implementation Config.depConfig.androidx.constraintlayout
+    testImplementation Config.depConfig.junit
+    androidTestImplementation Config.depConfig.test.android_junit
+    androidTestImplementation Config.depConfig.test.android_espresso
+
 }
