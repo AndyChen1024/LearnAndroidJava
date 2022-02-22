@@ -35,6 +35,6 @@
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 //}
-dependencies {
-    api Config.depConfig.lib_base.dep
-}
+//dependencies {
+//    api Config.libConfig.lib_base.dep
+//}

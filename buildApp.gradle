@@ -16,6 +16,15 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            storeFile file("../keystore/learn.keystore")
+            storePassword "learn123@"
+            keyAlias "learn"
+            keyPassword "learn123@\""
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
@@ -38,28 +47,27 @@ android {
         exclude 'META-INF/*'
     }
 
-    dexOptions {
-        preDexLibraries true
-        javaMaxHeapSize "8g"
-        maxProcessCount 8
-        dexInProcess = true
-    }
 }
 
 dependencies {
-//    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     // LeakCanary
 //    debugImplementation Config.depConfig.leakcanary_android.dep
+
+//    for (def entrySet : ConfigUtils.getTestDeps().entrySet()) {
+//        if(entrySet.key == "junit"){
+//            testImplementation entrySet.value.dep
+//        }else {
+//            androidTestImplementation entrySet.value.dep
+//        }
+//    }
     // 根据 Config.pkgConfig 来依赖所有 pkg
-    for (def entrySet : ConfigUtils.getAppDeps().entrySet()) {
+//    for (def entrySet : ConfigUtils.getAppDeps().entrySet()) {
+//        api entrySet.value.dep
+//    }
+    //lib
+//    api Config.libConfig.lib_common.dep
+    for (def entrySet : ConfigUtils.getApplyLibs().entrySet()) {
         api entrySet.value.dep
     }
-//    if (Config.depConfig.feature_mock.isApply) {
-//        api Config.depConfig.feature_mock.dep
-//    }
 }
-
-//def getSuffix() {
-//    if (project.name == "feature_launcher_app") return ""
-//    return "." + project.name.substring("feature_".length(), project.name.length() - "_app".length())
-//}

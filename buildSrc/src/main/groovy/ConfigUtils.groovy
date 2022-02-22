@@ -7,12 +7,13 @@ import org.gradle.api.initialization.Settings
 import org.gradle.api.invocation.Gradle
 
 class ConfigUtils {
-    static init(gradle){
+    static init(gradle) {
         GLog.l('ConfigUtils init start...')
         generateDep(gradle)
         addCommonGradle(gradle)
         TaskDurationUtils.init(gradle)
     }
+
     static addBuildListener(Gradle g) {
         g.addBuildListener(new BuildListener() {
 //            @Override
@@ -44,6 +45,25 @@ class ConfigUtils {
 
     private static void generateDep(Gradle gradle) {
         def configs = [:]
+//        for (Map.Entry<String, DepConfig> entry : Config.testConfig.entrySet()) {
+//            def (name, config) = [entry.key, entry.value]
+//            config.dep = config.remotePath
+//            configs.put(name, config)
+//        }
+//        for (Map.Entry<String, DepConfig> entry : Config.libConfig.entrySet()) {
+//            def (name, config) = [entry.key, entry.value]
+//            if (config.useLocal) {
+//                config.dep = config.localPath
+//            } else {
+//                config.dep = config.remotePath
+//            }
+//            configs.put(name, config)
+//        }
+//        for (Map.Entry<String, DepConfig> entry : Config.pluginConfig.entrySet()) {
+//            def (name, config) = [entry.key, entry.value]
+//            config.dep = config.pluginPath
+//            configs.put(name, config)
+//        }
         for (Map.Entry<String, DepConfig> entry : Config.depConfig.entrySet()) {
             def (name, config) = [entry.key, entry.value]
             if (name.startsWith("plugin_")) {
@@ -55,10 +75,12 @@ class ConfigUtils {
                     config.dep = config.remotePath
                 }
             }
+
             configs.put(name, config)
         }
         GLog.l("generateDep = ${GLog.object2String(configs)}")
     }
+
     private static addCommonGradle(Gradle gradle) {
         gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
             @Override
@@ -89,6 +111,7 @@ class ConfigUtils {
             }
         })
     }
+
     static getApplyPlugins() {
         def plugins = [:]
         for (Map.Entry<String, DepConfig> entry : Config.depConfig.entrySet()) {
@@ -100,11 +123,24 @@ class ConfigUtils {
         return plugins
     }
 
+//    static getTestDeps() {
+//        def pkgs = [:]
+//        for (Map.Entry<String, DepConfig> entry : Config.testConfig.entrySet()) {
+//            if (entry.value.isApply) {
+////            if (entry.value.isApply) {
+//                pkgs.put(entry.key, entry.value)
+//            }
+//        }
+//        GLog.d("getTestDeps = ${GLog.object2String(pkgs)}")
+//        return pkgs
+//    }
+
     static getAppDeps() {
         def pkgs = [:]
         for (Map.Entry<String, DepConfig> entry : Config.depConfig.entrySet()) {
-            if (entry.value.isApply && !entry.key.startsWith("lib_")&&!entry.key.startsWith("plugin_")) {
-//            if (entry.value.isApply) {
+            def isApply = entry.key.startsWith("leakcanary_") || entry.key.startsWith("lib_") || entry.key.startsWith("plugin_")
+
+            if (entry.value.isApply && !isApply) {
                 pkgs.put(entry.key, entry.value)
             }
         }
@@ -112,31 +148,15 @@ class ConfigUtils {
         return pkgs
     }
 
-    static getApplyPkgs() {
+    static getApplyLibs() {
         def pkgs = [:]
         for (Map.Entry<String, DepConfig> entry : Config.depConfig.entrySet()) {
-            if (entry.value.isApply && entry.key.endsWith("_pkg")) {
-//            if (entry.value.isApply) {
+            if (entry.value.isApply && entry.key.startsWith("lib_")) {
                 pkgs.put(entry.key, entry.value)
             }
         }
-        GLog.d("getApplyPkgs = ${GLog.object2String(pkgs)}")
+        GLog.d("getApplyLibs = ${GLog.object2String(pkgs)}")
         return pkgs
     }
 
-    static getApplyExports() {
-        def exports = [:]
-//        for (Map.Entry<String, DepConfig> entry : Config.depConfig.entrySet()) {
-//            if (entry.value.isApply && entry.key.endsWith("_export")) {
-//                exports.put(entry.key, entry.value)
-//            }
-//        }
-//        for (Map.Entry<String, DepConfig> entry : Config.depConfig.entrySet()) {
-//            if (entry.value.isApply && entry.key.contains("base")) {
-//                exports.put(entry.key, entry.value)
-//            }
-//        }
-        GLog.d("getApplyExports = ${GLog.object2String(exports)}")
-        return exports
-    }
 }

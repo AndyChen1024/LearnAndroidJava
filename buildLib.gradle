@@ -36,7 +36,15 @@ dependencies {
 //    } else if (project.name.endsWith("_export")) {
 //        api Config.depConfig.lib_common.dep
 //    }
-//    for (def entrySet : ConfigUtils.getApplyExports().entrySet()) {
-//            api entrySet.value.dep
-//        }
+    debugApi Config.depConfig.leakcanary_android.dep
+    for (def entrySet : ConfigUtils.getAppDeps().entrySet()) {
+        api entrySet.value.dep
+    }
+
+//    implementation fileTree(include: ['*.jar'], dir: 'libs')
+//    api Config.depConfig.utilcode.dep
+//    api Config.depConfig.androidx_material.dep
+//    api Config.depConfig.support_multidex.dep
+//    api Config.depConfig.support_constraintlayout.dep
+//    api Config.depConfig.kotlin.dep
 }

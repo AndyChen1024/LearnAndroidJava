@@ -35,17 +35,12 @@
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 //}
-
-dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+//
+//dependencies {
+//    implementation fileTree(include: ['*.jar'], dir: 'libs')
 //    api Config.depConfig.utilcode.dep
-//    api Config.depConfig.free_proguard.dep
-//    api Config.depConfig.swipe_panel.dep
-
-//    api Config.depConfig.support_appcompat_v7.dep
-//    api Config.depConfig.support_design.dep
-    api Config.depConfig.androidx_material.dep
-    api Config.depConfig.support_multidex.dep
-    api Config.depConfig.support_constraintlayout.dep
-    api Config.depConfig.kotlin.dep
-}
+//    api Config.depConfig.androidx_material.dep
+//    api Config.depConfig.support_multidex.dep
+//    api Config.depConfig.support_constraintlayout.dep
+//    api Config.depConfig.kotlin.dep
+//}
