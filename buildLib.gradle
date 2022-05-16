@@ -1,0 +1,50 @@
+GLog.d("buildLib.gradle")
+apply {
+    plugin "com.android.library"
+    plugin "kotlin-android"
+    plugin "kotlin-android-extensions"
+    plugin 'kotlin-kapt'
+}
+
+android {
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    GLog.d("buildLib.gradle:android")
+    compileSdkVersion Config.compileSdkVersion
+    defaultConfig {
+        GLog.d("buildLib.gradle:android:defaultConfig")
+        minSdkVersion Config.minSdkVersion
+        versionCode Config.versionCode
+        versionName Config.versionName
+
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    if (project.name.endsWith("_pkg") || project.name.endsWith("_mock")) {
+        // if module's name equals 'pkg', api all of export
+        for (def entrySet : ConfigUtils.getApplyExports().entrySet()) {
+            api entrySet.value.dep
+        }
+    } else if (project.name.endsWith("_export")) {
+        api Config.depConfig.lib_common.dep
+    }
+}

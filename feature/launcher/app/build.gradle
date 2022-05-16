@@ -1,0 +1,4 @@
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api Config.depConfig.lib_common.dep
+}

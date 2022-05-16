@@ -1,0 +1,78 @@
+apply {
+    plugin "com.android.application"
+    plugin "kotlin-android"
+    plugin "kotlin-android-extensions"
+
+}
+
+android {
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    compileSdkVersion Config.compileSdkVersion
+    defaultConfig {
+        minSdkVersion Config.minSdkVersion
+        versionCode Config.versionCode
+        versionName Config.versionName
+        applicationId Config.applicationId + suffix
+        targetSdkVersion Config.targetSdkVersion
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationIdSuffix ".debug"
+            resValue "string", "app_name", Config.appName + suffix + ".debug"
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "app_name", Config.appName + suffix
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/*'
+    }
+
+    dexOptions {
+        preDexLibraries true
+        javaMaxHeapSize "8g"
+        maxProcessCount 8
+        dexInProcess = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    // LeakCanary
+    debugImplementation Config.depConfig.leakcanary_android.dep
+    testImplementation Config.depConfig.junit.dep
+    androidTestImplementation Config.depConfig.android_junit.dep
+    androidTestImplementation Config.depConfig.android_espresso.dep
+
+    // 根据 Config.pkgConfig 来依赖所有 pkg
+    for (def entrySet : ConfigUtils.getApplyPkgs().entrySet()) {
+        api entrySet.value.dep
+    }
+
+    if (Config.depConfig.feature_mock != null) {
+        if (Config.depConfig.feature_mock.isApply) {
+            api Config.depConfig.feature_mock.dep
+        }
+    }
+
+}
+
+def getSuffix() {
+    if (project.name == "feature_launcher_app"||project.name == "app") return ""
+    return "." + project.name.substring("feature_".length(), project.name.length() - "_app".length())
+}
